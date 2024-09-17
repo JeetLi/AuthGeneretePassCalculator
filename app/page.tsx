@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useStore } from "../store/useStore";
+import s from "./page.module.scss";
 
 const IndexPage = () => {
   const [name, setName] = useState("");
@@ -19,6 +20,7 @@ const IndexPage = () => {
   const handleRouteCalculator = () => {
     localStorage.setItem("name", name);
     setNameInStore(name);
+    router.push("calculator");
   };
 
   const handleRouteGenerate = () => {
@@ -30,17 +32,29 @@ const IndexPage = () => {
   console.log(name);
 
   return (
-    <div>
-      <h1>Главная страница</h1>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Введите ваше имя"
-      />
-      <button onClick={handleRouteCalculator}>Открыть калькулятор</button>
-      <button onClick={handleRouteGenerate}>Открыть генератор</button>
-    </div>
+    <section className={s.wrapper}>
+      <div className={s.modal}>
+        <h1 className={s.title}>Начать</h1>
+        <div className={s.inputWrapper}>
+          <label>Напишите ваше имя</label>
+          <input
+            className={s.input}
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Ваше имя"
+          />
+        </div>
+        <div className={s.btnWrapper}>
+          <button className={s.btn} onClick={handleRouteCalculator}>
+            Открыть калькулятор
+          </button>
+          <button className={s.btn} onClick={handleRouteGenerate}>
+            Открыть генератор
+          </button>
+        </div>
+      </div>
+    </section>
   );
 };
 

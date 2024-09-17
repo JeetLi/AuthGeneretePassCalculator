@@ -1,0 +1,65 @@
+.wrapper {
+  position: relative;
+}
+
+.title {
+  margin: 10px 0px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24.2px;
+  text-align: left;
+  width: 72px;
+  height: 24px;
+  gap: 0px;
+  opacity: 0px;
+}
+
+.input {
+  width: Fill (670px) px;
+  height: Fixed (44px) px;
+  padding: 14px 16px 14px 16px;
+  gap: 10px;
+  border-radius: 8px;
+  border: 1px 0px 0px 0px;
+  opacity: 0px;
+  background: #ffffff;
+  border: 1px solid #d1d1d1;
+}
+
+.inputWrapper {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.modal {
+  position: absolute;
+  width: 750px;
+  height: 264px;
+  top: 371px;
+  left: 20%;
+  gap: 0px;
+  opacity: 0px;
+  padding: 30px;
+  border: 1px solid;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+}
+
+.btn {
+  background: #3b75a2;
+  width: Fixed (180px) px;
+  height: Fixed (44px) px;
+  padding: 14px 20px 14px 20px;
+  gap: 10px;
+  border-radius: 10px;
+  opacity: 0px;
+  color: #fff;
+}
+
+.btnWrapper {
+  gap: 10px;
+  margin-top: 50px;
+  display: flex;
+  justify-content: flex-end;
+}
