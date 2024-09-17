@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useStore } from "../store/useStore";
 import s from "./page.module.scss";
 
@@ -9,6 +9,7 @@ const IndexPage = () => {
   const [name, setName] = useState("");
   const setNameInStore = useStore((state) => state.setName);
   const router = useRouter();
+
   useEffect(() => {
     const storedName = localStorage.getItem("name");
     if (storedName) {
@@ -17,19 +18,14 @@ const IndexPage = () => {
     }
   }, [setNameInStore]);
 
-  const handleRouteCalculator = () => {
-    localStorage.setItem("name", name);
-    setNameInStore(name);
-    router.push("calculator");
-  };
-
-  const handleRouteGenerate = () => {
-    localStorage.setItem("name", name);
-    setNameInStore(name);
-    router.push("generator");
-  };
-
-  console.log(name);
+  const handleRoute = useCallback(
+    (path: string) => {
+      localStorage.setItem("name", name);
+      setNameInStore(name);
+      router.push(path);
+    },
+    [name, setNameInStore, router]
+  );
 
   return (
     <section className={s.wrapper}>
@@ -46,10 +42,10 @@ const IndexPage = () => {
           />
         </div>
         <div className={s.btnWrapper}>
-          <button className={s.btn} onClick={handleRouteCalculator}>
+          <button className={s.btn} onClick={() => handleRoute("calculator")}>
             Открыть калькулятор
           </button>
-          <button className={s.btn} onClick={handleRouteGenerate}>
+          <button className={s.btn} onClick={() => handleRoute("generator")}>
             Открыть генератор
           </button>
         </div>
