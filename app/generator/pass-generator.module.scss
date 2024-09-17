@@ -1,0 +1,68 @@
+.optionsWrapper {
+  display: flex;
+  flex-direction: column;
+}
+.title {
+  margin: 10px 0px;
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 48px;
+  text-align: left;
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input {
+  width: Fixed (600px) px;
+  height: Fixed (44px) px;
+  top: 222px;
+  left: 366px;
+  padding: 14px 16px 14px 16px;
+  gap: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d1d1;
+  opacity: 0px;
+}
+
+.btn {
+  background: #3b75a2;
+  width: Fixed (180px) px;
+  height: Fixed (44px) px;
+  padding: 14px 20px 14px 20px;
+  gap: 10px;
+  border-radius: 10px;
+  opacity: 0px;
+  color: #fff;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 100px;
+}
+
+.leftSide {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.passwordList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.passWrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 550px;
+  height: 31.78px;
+  padding: 3px 24px 3.39px 21px;
+  border: 1px;
+  border: 1px solid #00000021;
+}
