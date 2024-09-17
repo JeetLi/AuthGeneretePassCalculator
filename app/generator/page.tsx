@@ -1,54 +1,117 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useReducer } from "react";
 import s from "./pass-generator.module.scss";
 import CopiedIcon from "../../components/UI/copiedIcon";
 
+interface State {
+  password: string;
+  lengthPass: number;
+  arrPasswords: string[];
+  options: {
+    useUppercase: boolean;
+    useLowercase: boolean;
+    useNumbers: boolean;
+    useSymbols: boolean;
+    avoidRepeats: boolean;
+  };
+}
+
+type Action =
+  | { type: "SET_PASSWORD"; payload: string }
+  | { type: "SET_LENGTH"; payload: number }
+  | { type: "TOGGLE_OPTION"; payload: keyof State["options"] };
+
+const initialState: State = {
+  password: "",
+  lengthPass: 12,
+  arrPasswords: [],
+  options: {
+    useUppercase: true,
+    useLowercase: true,
+    useNumbers: true,
+    useSymbols: false,
+    avoidRepeats: false,
+  },
+};
+
+const chars: Record<string, string> = {
+  lowercase: "abcdefghijklmnopqrstuvwxyz",
+  uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  numbers: "0123456789",
+  symbols: "%*)?@#$~",
+};
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case "SET_PASSWORD":
+      return {
+        ...state,
+        password: action.payload,
+        arrPasswords: [action.payload, ...state.arrPasswords],
+      };
+    case "SET_LENGTH":
+      return { ...state, lengthPass: action.payload };
+    case "TOGGLE_OPTION":
+      return {
+        ...state,
+        options: {
+          ...state.options,
+          [action.payload]: !state.options[action.payload],
+        },
+      };
+    default:
+      return state;
+  }
+};
+
 const PasswordGenerator = () => {
-  const [password, setPassword] = useState("");
-  const [lengthPass, setLengthPass] = useState(12);
-  const [arrPasswords, setArrPasswords] = useState<string[]>([]);
-
-  const [useUppercase, setUseUppercase] = useState(true);
-  const [useLowercase, setUseLowercase] = useState(true);
-  const [useNumbers, setUseNumbers] = useState(true);
-  const [useSymbols, setUseSymbols] = useState(false);
-  const [avoidRepeats, setAvoidRepeats] = useState(false);
-
-  const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
-  const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const numberChars = "0123456789";
-  const symbolChars = "%*)?@#$~";
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const generatePassword = () => {
-    let chars = "";
-    if (useUppercase) chars += uppercaseChars;
-    if (useLowercase) chars += lowercaseChars;
-    if (useNumbers) chars += numberChars;
-    if (useSymbols) chars += symbolChars;
+    const { lengthPass, options } = state;
+    let selectedChars = Object.entries(options)
+      .filter(([key, value]) => value && chars[key.slice(3).toLowerCase()])
+      .map(([key]) => chars[key.slice(3).toLowerCase() as keyof typeof chars])
+      .join("");
 
-    if (chars.length === 0) {
-      alert("Выберите хотя бы одну опцию для генерации пароля.");
-      return;
-    }
+    if (!selectedChars) return alert("Выберите хотя бы одну опцию.");
 
     let newPassword = "";
     while (newPassword.length < lengthPass) {
-      const randomChar = chars.charAt(Math.floor(Math.random() * chars.length));
-      if (avoidRepeats && newPassword.includes(randomChar)) {
-        continue;
-      }
+      const randomChar = selectedChars.charAt(
+        Math.floor(Math.random() * selectedChars.length)
+      );
+      if (options.avoidRepeats && newPassword.includes(randomChar)) continue;
       newPassword += randomChar;
     }
 
-    setPassword(newPassword);
-    setArrPasswords((prev) => [newPassword, ...prev]);
+    dispatch({ type: "SET_PASSWORD", payload: newPassword });
   };
 
-  const handleCopy = (value: string) => {
-    navigator.clipboard.writeText(value);
-  };
+  const optionsList = [
+    { label: "Использовать прописные буквы", option: "useUppercase" },
+    { label: "Использовать строчные буквы", option: "useLowercase" },
+    { label: "Использовать цифры", option: "useNumbers" },
+    {
+      label: "Использовать символы: %, *, ), ?, @, #, $, ~",
+      option: "useSymbols",
+    },
+    { label: "Избегать повторения символов", option: "avoidRepeats" },
+  ];
 
+  const handleCopy = async (value: string) => {
+    try {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(value);
+        alert("Пароль скопирован!");
+      } else {
+        alert("Ваш браузер не поддерживает копирование через Clipboard API");
+      }
+    } catch (err) {
+      alert("Ошибка копирования: " + err);
+    }
+  };
   return (
     <section>
       <h1 className={s.title}>Генератор паролей</h1>
@@ -60,63 +123,48 @@ const PasswordGenerator = () => {
               className={s.input}
               type="number"
               min="1"
-              value={lengthPass}
-              onChange={(e) => setLengthPass(Number(e.target.value))}
+              value={state.lengthPass}
+              onChange={(e) =>
+                dispatch({
+                  type: "SET_LENGTH",
+                  payload: Number(e.target.value),
+                })
+              }
             />
           </div>
 
           <div className={s.optionsWrapper}>
-            <label>
-              <input
-                type="checkbox"
-                checked={useUppercase}
-                onChange={() => setUseUppercase(!useUppercase)}
-              />
-              Использовать прописные буквы
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={useLowercase}
-                onChange={() => setUseLowercase(!useLowercase)}
-              />
-              Использовать строчные буквы
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={useNumbers}
-                onChange={() => setUseNumbers(!useNumbers)}
-              />
-              Использовать цифры
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={useSymbols}
-                onChange={() => setUseSymbols(!useSymbols)}
-              />
-              Использовать символы: %, *, ), ?, @, #, $, ~
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={avoidRepeats}
-                onChange={() => setAvoidRepeats(!avoidRepeats)}
-              />
-              Избегать повторения символов
-            </label>
+            {optionsList.map(({ label, option }) => (
+              <label key={option}>
+                <input
+                  type="checkbox"
+                  checked={state.options[option as keyof State["options"]]}
+                  onChange={() =>
+                    dispatch({
+                      type: "TOGGLE_OPTION",
+                      payload: option as keyof State["options"],
+                    })
+                  }
+                />
+                {label}
+              </label>
+            ))}
           </div>
 
           <button className={s.btn} onClick={generatePassword}>
             Сгенерировать пароль
           </button>
         </div>
+
         <div className={s.rightSide}>
           <div className={s.passwordList}>
-            {arrPasswords.map((item, index) => (
-              <div className={s.passWrapper} key={index}>
-                <p onClick={() => handleCopy(item)}>{item}</p>
+            {state.arrPasswords.map((item: string, index: number) => (
+              <div
+                onClick={() => handleCopy(item)}
+                className={s.passWrapper}
+                key={index}
+              >
+                <p>{item}</p>
                 <CopiedIcon />
               </div>
             ))}
