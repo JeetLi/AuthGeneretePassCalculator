@@ -1,0 +1,19 @@
+.header {
+  margin-top: 30px;
+  margin-bottom: 100px;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.leftSide {
+  display: flex;
+  gap: 40px;
+}
+.rightSide {
+}
+.userName {
+}
