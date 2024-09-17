@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import s from "./calculator.module.scss";
 
 const btnsArr = [
@@ -64,6 +64,26 @@ const Calculator = () => {
         setInput(input + value);
     }
   };
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    const key = event.key;
+    if (/\d/.test(key) || ["/", "*", "-", "+", ".", "%"].includes(key)) {
+      setInput(input + key);
+    } else if (key === "Enter") {
+      handleButtonClick("=");
+    } else if (key === "Backspace") {
+      handleButtonClick("<X");
+    } else if (key === "Escape") {
+      handleButtonClick("C");
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [input]);
 
   const renderBtn = (value: string, color: string, span?: number) => (
     <div
