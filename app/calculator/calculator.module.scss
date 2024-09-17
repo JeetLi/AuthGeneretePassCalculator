@@ -1,0 +1,49 @@
+.inputValue {
+  width: 398px;
+  height: 47px;
+  gap: 0px;
+  opacity: 0.4px;
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 46.92px;
+  text-align: right;
+}
+.outputValue {
+  width: 398px;
+  height: 96px;
+  gap: 0px;
+  opacity: 0px;
+  font-size: 96px;
+  font-weight: 300;
+  line-height: 96px;
+  text-align: right;
+}
+
+.calculatorWrapper {
+  padding: 20px;
+  width: 438px;
+  height: 707px;
+  border-radius: 6px;
+  opacity: 0px;
+  background-color: #c4c4c4;
+}
+.btn {
+  width: 87.5px;
+  height: 72px;
+  padding: 12px 11.5px 12px 12px;
+  gap: 0px;
+  border-radius: 24px;
+  opacity: 0px;
+  display: flex;
+  background-color: rgb(59, 117, 162);
+  grid-column: auto;
+  justify-content: center;
+  align-items: center;
+}
+.btnWrapper {
+  display: flex;
+  width: 400px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
