@@ -1,0 +1,2 @@
+# AuthGeneretePassCalculator
+Test task
